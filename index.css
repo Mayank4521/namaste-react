@@ -61,6 +61,7 @@ body{
     font-size: medium;
     padding: 10px 30px;
     border-radius: 50px;
+    cursor: pointer;
 }
 .search-container button:hover{
     background-color: #fe820e;
