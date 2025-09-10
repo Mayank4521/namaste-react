@@ -20,25 +20,61 @@ body{
     height: 100%;
     object-fit: cover;
 }
+
+.nav-items{
+    display: flex;
+    align-items: center;
+    gap:30px;
+}
+
 .nav-items>ul{
     display: flex;
     align-items: center;
     gap:30px;
     list-style-type: none;
     font-size: large;
-    cursor:pointer
 }
-.nav-items>ul .cart{
+
+.nav-items>ul li{
+    cursor: pointer;
+}
+
+.nav-items .btnLogin{
     background-color: #ff9c3f;
     padding:5px 15px;
     border-radius: 50px;
+    font-size: large;
     color: white;
+    border: none;
+    cursor: pointer;
 }
-.nav-items>ul .cart:hover{
+.nav-items>ul .btnLogin:hover{
     background-color: #fe820e;
 }
 
 /* all body components */
+.filter{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.filter .filter-btn{
+    border: none;
+    background-color: white;
+    color: #ff9c3f;
+    font-size: medium;
+    font-weight: bold;
+    padding: 10px 30px;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 1px 2px 8px rgb(169, 169, 169)
+}
+.filter .filter-btn:hover{
+    color:#fe820e;
+    background-color: rgb(245, 245, 245);
+
+}
+
 .search-container{
     display: flex;
     align-items: center;
@@ -122,4 +158,21 @@ body{
   color: white;
   margin-top: 50px;
   text-align: center;
+}
+
+.shimmer-container{
+    margin-top: 70px;
+    display: flex;
+    padding:30px;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+    
+}
+.shimmer-container .shimmer-cards{
+    width: 200px;
+    height: 260px;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: #f0f0f0;
 }

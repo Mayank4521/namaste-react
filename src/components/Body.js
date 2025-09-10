@@ -1,95 +1,63 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ResCard from "./ResCard";
-import resList from "../utils/mockData"
-
-
-
+import Shimmer from "./Shimmer";
 
 const Body = () => {
   //always use useState inside a functional components
-  const [listOfRestaurants, setListOfRestaurants] = useState(resList);
+  const [listOfRestaurants, setListOfRestaurants] = useState([]);
+  const [filteredRestaurant, setFilteredRestaurant] = useState([]);
 
-// let listItemsNormal = [
-//   {
-// "info": {
-// "id": "408505",
-// "name": "KFC",
-// "cloudinaryImageId": "RX_THUMBNAIL/IMAGES/VENDOR/2024/12/9/a3b08376-68d6-4984-819b-882c62e41afa_408505.JPG",
-// "locality": "Sewla Kalan",
-// "areaName": "Morowala",
-// "costForTwo": "₹400 for two",
-// "cuisines": [
-// "Burgers",
-// "Fast Food",
-// "Rolls & Wraps"
-// ],
-// "avgRating": 4.3,
-// "sla": {
-// "deliveryTime": 24,
-// },
-// }
-// },
-//   {
-// "info": {
-// "id": "408506",
-// "name": "KFC",
-// "cloudinaryImageId": "RX_THUMBNAIL/IMAGES/VENDOR/2024/12/9/a3b08376-68d6-4984-819b-882c62e41afa_408505.JPG",
-// "locality": "Sewla Kalan",
-// "areaName": "Morowala",
-// "costForTwo": "₹400 for two",
-// "cuisines": [
-// "Burgers",
-// "Fast Food",
-// "Rolls & Wraps"
-// ],
-// "avgRating": 4.1,
-// "sla": {
-// "deliveryTime": 24,
-// },
-// }
-// },
-//   {
-// "info": {
-// "id": "408507",
-// "name": "KFC",
-// "cloudinaryImageId": "RX_THUMBNAIL/IMAGES/VENDOR/2024/12/9/a3b08376-68d6-4984-819b-882c62e41afa_408505.JPG",
-// "locality": "Sewla Kalan",
-// "areaName": "Morowala",
-// "costForTwo": "₹400 for two",
-// "cuisines": [
-// "Burgers",
-// "Fast Food",
-// "Rolls & Wraps"
-// ],
-// "avgRating": 3.8,
-// "sla": {
-// "deliveryTime": 24,
-// },
-// }
-// }
-// ]
-  return (
+  const [searchText,setSearchText] = useState("")
+
+  useEffect(()=>{
+    fetchData()
+  },[])
+
+    const fetchData = async ()=>{
+      const data = await fetch(
+        "https://proxy.corsfix.com/?https://www.swiggy.com/dapi/restaurants/list/v5?lat=30.3252639&lng=78.0412983&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING")
+      
+      const json = await data.json()
+    
+      // console.log(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+      setListOfRestaurants(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+      setFilteredRestaurant(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+    }
+
+
+    //conditional rendering
+  //   if(listOfRestaurants.length === 0){
+  //   return <Shimmer />
+  // }  
+
+  return listOfRestaurants.length === 0 ? (
+  <Shimmer />
+  ) : (
     <div className="body">
-      <div className="search-container">
-        {/* <input type="text" placeholder="Restaurant Name" /> */}
-        <button className="search-btn" onClick={()=>{
+      <div className="filter">
+        <div className="search-container">
+          <input type="text" placeholder="search" value={searchText} onChange={(e)=>{
+            setSearchText(e.target.value)
+          }}/>
+          <button className="search-btn" onClick={()=>{
+            // console.log(searchText)
+
+            const filteredRes = listOfRestaurants.filter(
+              (restaurant)=> restaurant.info.name.toLowerCase().includes(searchText.toLowerCase()))
+
+            setFilteredRestaurant(filteredRes)
+
+          }} >Search</button>
+        </div>
+        <button className="filter-btn" onClick={()=>{
           const filteredList = listOfRestaurants.filter((res)=>res.info.avgRating >= 4.5)
 
-          setListOfRestaurants(filteredList)
+          setFilteredRestaurant(filteredList)
           console.log(filteredList)
          } }>Top rated Restaurants</button>
       </div>
       <div className="res-container">
-        {/* <ResCard resData={resList[0]} />
-        <ResCard resData={resList[1]} />
-        <ResCard resData={resList[2]} />
-        <ResCard resData={resList[3]} />
-        <ResCard resData={resList[4]} />
-        <ResCard resData={resList[5]} />
-        <ResCard resData={resList[6]} />
-        <ResCard resData={resList[7]} />
-        <ResCard resData={resList[8]} /> */}
-        {listOfRestaurants.map((restaurant)=>(
+        {filteredRestaurant.map((restaurant)=>(
             <ResCard key={restaurant.info.id} resData={restaurant} ></ResCard>
         ))}
       </div>

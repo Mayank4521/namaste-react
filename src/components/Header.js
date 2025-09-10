@@ -1,6 +1,14 @@
+import { useEffect, useState } from "react";
 import { LOGO_IMG } from "../utils/constants";
 
 const Header = () => {
+
+  const [btnNameReact,setBtnNameReact] = useState("Login")
+
+  useEffect(()=>{
+    console.log("useEffect called")
+  },[])
+
   return (
     <div className="header">
       <div className="logo-container">
@@ -15,8 +23,12 @@ const Header = () => {
           <li>Home</li>
           <li>About</li>
           <li>Contact</li>
-          <li className="cart">Cart</li>
+          <li>Cart</li>
         </ul>
+        <button className="btnLogin" onClick={()=>{
+          btnNameReact === "Login" ? setBtnNameReact("Logout") : setBtnNameReact("Login")
+          console.log(btnNameReact)
+        }}>{btnNameReact}</button>
       </div>
     </div>
   );
