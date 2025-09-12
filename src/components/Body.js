@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ResCard from "./ResCard";
 import Shimmer from "./Shimmer";
+import { Link } from "react-router";
 
 const Body = () => {
   //always use useState inside a functional components
@@ -19,7 +20,7 @@ const Body = () => {
       
       const json = await data.json()
     
-      // console.log(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+      console.log(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
       setListOfRestaurants(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
       setFilteredRestaurant(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
     }
@@ -37,7 +38,12 @@ const Body = () => {
       <div className="filter">
         <div className="search-container">
           <input type="text" placeholder="search" value={searchText} onChange={(e)=>{
-            setSearchText(e.target.value)
+            const value = e.target.value
+            setSearchText(value)
+            const filteredRes = listOfRestaurants.filter(
+              (restaurant)=> restaurant.info.name.toLowerCase().replace(/\s+/g, "").includes(value.toLowerCase().trim().replace(/\s+/g, "")))
+
+            setFilteredRestaurant(filteredRes)
           }}/>
           <button className="search-btn" onClick={()=>{
             // console.log(searchText)
@@ -58,7 +64,7 @@ const Body = () => {
       </div>
       <div className="res-container">
         {filteredRestaurant.map((restaurant)=>(
-            <ResCard key={restaurant.info.id} resData={restaurant} ></ResCard>
+            <Link key={restaurant.info.id} to={"/restaurant/" + restaurant.info.id} className="card-link"><ResCard resData={restaurant} ></ResCard></Link>
         ))}
       </div>
     </div>
